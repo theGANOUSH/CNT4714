@@ -1,57 +1,49 @@
 package views;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.FlowLayout;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class InitGUI extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldNumItems1;
 	private JTextField textFieldBookID1;
 	private JTextField textFieldQuantity1;
 	private JTextField textFieldInfo1;
 	private JTextField textFieldSubtotal1;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InitGUI frame = new InitGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	private JLabel labelBookID1 = new JLabel("Enter Book ID for Item #1:");
+	private JLabel lblQuantity1 = new JLabel("Enter quantity for Item #1:");
+	private JLabel lblItemInfo = new JLabel("Item #1 info:");
+	private JLabel lblOrderSubtotalOf = new JLabel("Order subtotal of Items(s):");
+	
+	private JButton btnProcessItem = new JButton("Process Item #1");
+	private JButton btnConfirmItem = new JButton("Confirm Item #1");
+	private JButton btnViewOrder = new JButton("View Order");
+	private JButton btnFinishOrder = new JButton("Finish Order");
+	private JButton btnNewOrder = new JButton("New Order");
+	private JButton btnExit = new JButton("Exit");
+	private int numOrders = 0;
 
 	/**
 	 * Create the frame.
 	 */
 	public InitGUI() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(InitGUI.class.getResource("/common/noun_2051_cc.png")));
 		setTitle("Ye Olde Book Shoppe");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 644, 249);
@@ -60,7 +52,25 @@ public class InitGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		//Input Panel
+		JPanel panelButtons = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panelButtons.getLayout();
+		flowLayout.setVgap(2);
+		flowLayout.setHgap(2);
+		contentPane.add(panelButtons, BorderLayout.SOUTH);
+		
+		
+		panelButtons.add(btnProcessItem);
+		panelButtons.add(btnConfirmItem);
+		panelButtons.add(btnViewOrder);
+		panelButtons.add(btnFinishOrder);
+		panelButtons.add(btnNewOrder);
+		panelButtons.add(btnExit);
+		
+		
+		btnConfirmItem.setEnabled(false);
+		btnViewOrder.setEnabled(false);
+		btnFinishOrder.setEnabled(false);
+		
 		JPanel panelInputFields = new JPanel();
 		contentPane.add(panelInputFields, BorderLayout.CENTER);
 		
@@ -73,7 +83,7 @@ public class InitGUI extends JFrame {
 		textFieldBookID1 = new JTextField();
 		textFieldBookID1.setColumns(10);
 		
-		JLabel labelBookID1 = new JLabel("Enter Book ID for Item #1:");
+		
 		labelBookID1.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		textFieldQuantity1 = new JTextField();
@@ -85,13 +95,11 @@ public class InitGUI extends JFrame {
 		textFieldSubtotal1 = new JTextField();
 		textFieldSubtotal1.setColumns(10);
 		
-		JLabel lblQuantity1 = new JLabel("Enter quantity for Item #1:");
 		lblQuantity1.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblItemInfo = new JLabel("Item #1 info:");
 		lblItemInfo.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		JLabel lblOrderSubtotalOf = new JLabel("Order subtotal of Items(s):");
+		
 		lblOrderSubtotalOf.setHorizontalAlignment(SwingConstants.RIGHT);
 		GroupLayout gl_panelInputFields = new GroupLayout(panelInputFields);
 		gl_panelInputFields.setHorizontalGroup(
@@ -113,6 +121,7 @@ public class InitGUI extends JFrame {
 						.addComponent(textFieldQuantity1, GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE))
 					.addGap(49))
 		);
+		
 		gl_panelInputFields.setVerticalGroup(
 			gl_panelInputFields.createParallelGroup(Alignment.LEADING)
 				.addGroup(Alignment.TRAILING, gl_panelInputFields.createSequentialGroup()
@@ -140,39 +149,63 @@ public class InitGUI extends JFrame {
 		);
 		panelInputFields.setLayout(gl_panelInputFields);
 		
-		//Button Panel
-		JPanel panelButtons = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panelButtons.getLayout();
-		flowLayout.setVgap(2);
-		flowLayout.setHgap(2);
-		contentPane.add(panelButtons, BorderLayout.SOUTH);
+		ButtonHandler actionhandler = new ButtonHandler();
+		btnProcessItem.addActionListener(actionhandler);
+		btnConfirmItem.addActionListener(actionhandler);
+		btnViewOrder.addActionListener(actionhandler);
+		btnFinishOrder.addActionListener(actionhandler);
+		btnNewOrder.addActionListener(actionhandler);
+		btnExit.addActionListener(actionhandler);
 		
-		JButton btnProcessItem = new JButton("Process Item #1");
-		panelButtons.add(btnProcessItem);
 		
-		JButton btnConfirmItem = new JButton("Confirm Item #1");
-		btnConfirmItem.setEnabled(false);
-		panelButtons.add(btnConfirmItem);
-		
-		JButton btnViewOrder = new JButton("View Order");
-		btnViewOrder.setEnabled(false);
-		panelButtons.add(btnViewOrder);
-		
-		JButton btnFinishOrder = new JButton("Finish Order");
-		btnFinishOrder.setEnabled(false);
-		panelButtons.add(btnFinishOrder);
-		
-		JButton btnNewOrder = new JButton("New Order");
-		panelButtons.add(btnNewOrder);
-		
-		JButton btnExit = new JButton("Exit");
-		
-		btnExit.addActionListener(new ActionListener() {
+	}
+	
+	private class ButtonHandler implements ActionListener{
+
+		public void actionPerformed(ActionEvent event) {
+			// TODO Auto-generated method stub
 			
-			public void actionPerformed(ActionEvent arg0) {
+			int bookIDNum = 0;
+			int bookQuantity = 0;
+			int count = 1;
+
+			if(event.getActionCommand() == "Exit") {
 				System.exit(0);
+				
+			}else {
+				
+			try {
+				numOrders = Integer.valueOf(textFieldNumItems1.getText());
+				bookIDNum = Integer.valueOf(textFieldBookID1.getText());
+				bookQuantity = Integer.valueOf(textFieldQuantity1.getText());
+				}catch(NumberFormatException e) {
+					JOptionPane.showMessageDialog(null,"Please Enter a Valid Number!", "Error!", JOptionPane.ERROR_MESSAGE);
+					
+				}				
+					
+				if(event.getActionCommand().contains("Process")) {
+					if(numOrders <= 0) {
+						System.out.println(textFieldNumItems1.getText());
+						JOptionPane.showMessageDialog(null,"Please Enter a Valid Number of Items!", "Warning!", JOptionPane.WARNING_MESSAGE);
+					}
+					else if(bookIDNum < 0) {
+						JOptionPane.showMessageDialog(null,"Please Enter a Valid Book ID!", "Warning!", JOptionPane.WARNING_MESSAGE);
+					}
+					else if(bookQuantity <= 0) {
+						JOptionPane.showMessageDialog(null,"Please Enter a Valid Quantity of Books!", "Warning!", JOptionPane.WARNING_MESSAGE);
+					}
+					else {
+						
+						String acceptedMessage = "Item#" + Integer.toString(count) +" accepted.";
+						JOptionPane.showMessageDialog(null,acceptedMessage, "Accepted", JOptionPane.PLAIN_MESSAGE);
+						textFieldNumItems1.setEditable(false);
+						btnConfirmItem.setEnabled(true);
+						
+					}
+				
+				}
+				
 			}
-		});
-		panelButtons.add(btnExit);
+		}
 	}
 }
