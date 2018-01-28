@@ -1,7 +1,8 @@
 /**
- * Author: Austin Lowe
- * Date: Jan 27, 2018
- * Project1_2
+ * Name: Austin Lowe
+ * Course: CNT 4714 – Spring 2018
+ * Assignment title: Program 1 – Event-driven Programming
+ * Date: Sunday January 28, 2018
  * 
  */
 package common;

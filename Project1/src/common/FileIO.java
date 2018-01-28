@@ -1,33 +1,78 @@
 package common;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class FileIO {
 	
-	public static void readInventory(String input) {
-		InputStream in = ClassLoader.class.getResourceAsStream("/src/common/inventory.txt");
-		InputStreamReader inr = new InputStreamReader(in);
-			
+	public static List<Book> readCSV() throws FileNotFoundException, IOException{
+		List<Book> books = new ArrayList<>();
 		
+		FileInputStream file = new FileInputStream("src/common/inventory.txt");
+		DataInputStream in = new DataInputStream(file);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		
+		String line;
+		
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
+            String[] fields = line.split(",");
+            String id = fields[0];
+            String title = fields[1];
+            String price = fields[2];
+            
+            Book newBook = new Book(Integer.valueOf(id), price, title);
+            
+            books.add(newBook);
+        }
+        
+        br.close();
+        in.close();
+		
+		return books;
 	}
 	
-	public static void writeTransactions(String output) {
+	public static Book search(int id) throws FileNotFoundException, IOException {
+		
+		List<Book> library = null;
+		Book foundBook = null;
+		
+		library = readCSV();
+		
+		for(Book d : library){
+			if(d.getID() != 0 && d.getID()== id) {
+				foundBook = d;
+		        }
+			}
+		
+		return foundBook;
+	}
+	
+	public static void writeTransaction(String output) {
 		try {
-			FileWriter stream = new FileWriter("transactions.txt");
-			BufferedWriter writeOut = new BufferedWriter(stream);
+			FileWriter outStream = new FileWriter("transactions.txt", true);
 			
-			writeOut.write(output);
-			writeOut.newLine();
-			writeOut.close();
+			BufferedWriter oFile = new BufferedWriter(outStream);
+			
+			oFile.append(output);
+			
+			oFile.close();
+			outStream.close();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.err.println("Error: " + e.getMessage());
+			System.err.println("Error: " +e.getMessage());
 		}
+		
 	}
+
 	
 }
