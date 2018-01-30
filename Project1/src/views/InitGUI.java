@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import common.Book;
-import common.FileIO;
 import common.Invoice;
+import fileIO.FileIO;
 
 import javax.swing.JButton;
 import javax.swing.SwingConstants;

@@ -1,4 +1,4 @@
-package common;
+package fileIO;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,13 +11,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.Book;
+
 
 public class FileIO {
 	
 	public static List<Book> readCSV() throws FileNotFoundException, IOException{
 		List<Book> books = new ArrayList<>();
 		
-		FileInputStream file = new FileInputStream("src/common/inventory.txt");
+		FileInputStream file = new FileInputStream("src/FileIO/inventory.txt");
 		DataInputStream in = new DataInputStream(file);
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		
